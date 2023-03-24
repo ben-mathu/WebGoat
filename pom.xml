@@ -10,7 +10,7 @@
   </parent>
   <groupId>org.owasp.webgoat</groupId>
   <artifactId>webgoat</artifactId>
-  <version>2023.3</version>
+  <version>2023.4</version>
   <packaging>jar</packaging>
 
   <name>WebGoat</name>
@@ -536,6 +536,11 @@
             <flexmark></flexmark>
           </markdown>
           <java>
+            <includes>
+              <include>src/main/java/**/*.java</include>
+              <include>src/test/java/**/*.java</include>
+              <include>src/it/java/**/*.java</include>
+            </includes>
             <removeUnusedImports></removeUnusedImports>
             <googleJavaFormat>
               <style>GOOGLE</style>
@@ -650,8 +655,9 @@
                     <argument>java</argument>
                     <argument>-jar</argument>
                     <argument>-Dlogging.pattern.console=</argument>
+                    <argument>-Dwebgoat.server.directory=${java.io.tmpdir}/webgoat_${webgoat.port}</argument>
+                    <argument>-Dwebgoat.user.directory=${java.io.tmpdir}/webgoat_${webgoat.port}</argument>
                     <argument>-Dspring.main.banner-mode=off</argument>
-                    <argument>-Dspring.datasource.url=jdbc:hsqldb:file:${java.io.tmpdir}/webgoat</argument>
                     <argument>-Dwebgoat.port=${webgoat.port}</argument>
                     <argument>-Dwebwolf.port=${webwolf.port}</argument>
                     <argument>--add-opens</argument>
@@ -675,7 +681,7 @@
                     <argument>${project.build.directory}/webgoat-${project.version}.jar</argument>
                   </arguments>
                   <waitForInterrupt>false</waitForInterrupt>
-                  <healthcheckUrl>http://localhost:${webgoat.port}/WebGoat/</healthcheckUrl>
+                  <healthcheckUrl>http://localhost:${webgoat.port}/WebGoat/actuator/health</healthcheckUrl>
                 </configuration>
               </execution>
               <execution>
